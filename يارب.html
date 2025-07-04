@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>رفع فيديو إلى Firebase</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      color: #2d3748;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 500px;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 24px;
+      color: #4a5568;
+      font-weight: 700;
+    }
+
+    .file-input-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .file-input-label {
+      display: block;
+      width: 100%;
+      padding: 40px 20px;
+      background: #edf2f7;
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      color: #4a5568;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .file-input-label:hover {
+      border-color: #4299e1;
+      background: #ebf8ff;
+    }
+
+    .file-input-label i {
+      display: block;
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: #4299e1;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    .video-info {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .video-info p {
+      margin-bottom: 8px;
+      color: #4a5568;
+    }
+
+    .video-info span {
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #4299e1;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      background: #3182ce;
+    }
+
+    button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+    }
+
+    .progress-container {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4299e1, #3182ce);
+      transition: width 0.3s ease;
+    }
+
+    .link-box {
+      margin-top: 20px;
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 10px;
+      word-break: break-all;
+      border: 1px solid #e2e8f0;
+      display: none;
+    }
+
+    .link-box a {
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .link-box a:hover {
+      text-decoration: underline;
+    }
+
+    .success-message {
+      color: #38a169;
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 500;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>رفع الفيديو إلى السحابة</h1>
+    
+    <div class="file-input-container">
+      <label for="fileInput" class="file-input-label" id="fileInputLabel">
+        <i>🎬</i>
+        انقر لاختيار ملف فيديو
+        <div id="fileName" style="margin-top: 10px; font-size: 14px;"></div>
+      </label>
+      <input type="file" id="fileInput" accept="video/*" />
+    </div>
+    
+    <div class="video-info" id="videoInfo">
+      <p><span>اسم الملف:</span> <span id="info-name"></span></p>
+      <p><span>حجم الملف:</span> <span id="info-size"></span></p>
+      <p><span>مدة الفيديو:</span> <span id="info-duration"></span></p>
+      <p><span>نوع الملف:</span> <span id="info-type"></span></p>
+    </div>
+    
+    <button id="uploadBtn" onclick="uploadFile()" disabled>
+      <span>رفع الفيديو</span>
+      <span>⬆️</span>
+    </button>
+    
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-header">
+        <span id="progressText">0%</span>
+        <span id="uploadSpeed"></span>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+    
+    <div class="link-box" id="linkBox">
+      <div><strong>رابط الفيديو:</strong> <a id="downloadLink" href="#" target="_blank"></a></div>
+    </div>
+    
+    <div class="success-message" id="successMessage">
+      تم رفع الفيديو بنجاح!
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA2psLLbMC-We-YP5lwybV5eh3JVuAO-qE",
+      authDomain: "music-online-4b0ac.firebaseapp.com",
+      projectId: "music-online-4b0ac",
+      storageBucket: "music-online-4b0ac.appspot.com",
+      messagingSenderId: "771810788637",
+      appId: "1:771810788637:web:e77c70079f120cf79bcdf4"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+    let uploadStartTime;
+    let lastBytesTransferred = 0;
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // عرض معلومات الملف
+      document.getElementById('fileName').textContent = file.name;
+      document.getElementById('uploadBtn').disabled = false;
+      
+      // عرض معلومات الفيديو
+      document.getElementById('videoInfo').style.display = 'block';
+      document.getElementById('info-name').textContent = file.name;
+      document.getElementById('info-size').textContent = formatFileSize(file.size);
+      document.getElementById('info-type').textContent = file.type;
+      
+      // الحصول على مدة الفيديو
+      getVideoDuration(file).then(duration => {
+        document.getElementById('info-duration').textContent = formatDuration(duration);
+      });
+    });
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 بايت';
+      const k = 1024;
+      const sizes = ['بايت', 'كيلوبايت', 'ميجابايت', 'جيجابايت'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function formatDuration(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+    }
+
+    function getVideoDuration(file) {
+      return new Promise((resolve) => {
+        const video = document.createElement('video');
+        video.preload = 'metadata';
+        
+        video.onloadedmetadata = function() {
+          window.URL.revokeObjectURL(video.src);
+          resolve(video.duration);
+        }
+        
+        video.src = URL.createObjectURL(file);
+      });
+    }
+
+    function uploadFile() {
+      const file = document.getElementById("fileInput").files[0];
+      if (!file) return alert("يرجى اختيار ملف أولًا.");
+
+      const uploadBtn = document.getElementById("uploadBtn");
+      uploadBtn.disabled = true;
+      uploadBtn.innerHTML = '<span>جاري الرفع...</span> <span>⏳</span>';
+      
+      const storageRef = storage.ref("videos/" + Date.now() + "_" + file.name);
+      const uploadTask = storageRef.put(file);
+      uploadStartTime = Date.now();
+      lastBytesTransferred = 0;
+
+      document.getElementById("progressContainer").style.display = "block";
+
+      uploadTask.on("state_changed",
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          document.getElementById("progressBar").style.width = progress + "%";
+          document.getElementById("progressText").textContent = Math.floor(progress) + "%";
+          
+          // حساب سرعة الرفع
+          const now = Date.now();
+          const timeElapsed = (now - uploadStartTime) / 1000; // بالثواني
+          const speed = (snapshot.bytesTransferred - lastBytesTransferred) / (1024 * timeElapsed);
+          lastBytesTransferred = snapshot.bytesTransferred;
+          uploadStartTime = now;
+          
+          document.getElementById("uploadSpeed").textContent = speed > 1024 
+            ? (speed / 1024).toFixed(2) + ' MB/s' 
+            : speed.toFixed(2) + ' KB/s';
+        },
+        (error) => {
+          alert("حدث خطأ أثناء الرفع: " + error.message);
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = '<span>رفع الفيديو</span> <span>⬆️</span>';
+          document.getElementById("progressContainer").style.display = "none";
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+            document.getElementById("linkBox").style.display = "block";
+            document.getElementById("successMessage").style.display = "block";
+            const linkEl = document.getElementById("downloadLink");
+            linkEl.href = url;
+            linkEl.textContent = url;
+            
+            uploadBtn.innerHTML = '<span>تم الرفع بنجاح!</span> <span>✅</span>';
+          });
+        }
+      );
+    }
+  </script>
+</body>
+</html>
