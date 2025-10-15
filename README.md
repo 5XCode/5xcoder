@@ -6,7 +6,7 @@ html
 </div>
 
 <div align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=50&duration=2500&pause=800&color=00D9FF&center=true&vCenter=true&repeat=true&width=800&height=120&lines=🔥+5XCoder;💻+Software+Engineer;🚀+Prompt+Engineer;🔒+Cybersecurity+Enthusiast" alt="5XCoder Animated Typing" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=50&duration=2500&pause=800&color=00D9FF&center=true&vCenter=true&repeat=true&width=800&height=120&lines=+5XCoder;💻+Software+Engineer;🚀+Prompt+Engineer;App Devolepor" alt="5XCoder Animated Typing" />
 </div>
 
 ---
