@@ -1,4 +1,4 @@
-# <div align="center">🌟Welcome to the world of MSR Cracker🌟</div>
+# <div align="center">🌟Welcome to My Account 5XCoder🌟</div>
 
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=300&section=header&text=MSR%20CRACKER&fontSize=50&fontAlignY=35&desc=Shadow%20Developer%20|%20Problem%20Solver%20|%20Code%20Artist&descAlignY=55&descAlign=50&animation=twinkling" />
@@ -20,26 +20,26 @@
 
 <img width="100%" src="https://github.com/MSR-Cracker/MSR-Cracker/blob/main/assets/divider.gif" alt="Divider"/>
 
-## 🔬 MSR.exe - System Analysis
+## 🔬 5XCoder.exe - System Analysis
 
 ```bash
-┌─[MSR-Cracker@shadow-dev]─[~]
+┌─[5XCoder@shadow-dev]─[~]
 └──╼ $ cat /etc/developer.conf
 
 ╔══════════════════════════════════════════════════════════════════╗
 ║                      🎯 SYSTEM SPECIFICATIONS                                                ║
 ╠══════════════════════════════════════════════════════════════════╣
-║  👤 Developer: MSR Cracker                                                                      ║
-║  📍 Location: Egypt 🇪🇬.                                                                          ║
-║  🧠 Specialization: Full Stack + Security                                                          ║
-║  🎂 Active Since: 2007                                                                           ║
+║  👤 Developer: 5XCoder                                                                      ║
+║  📍 Location: Cairo 🇪🇬.                                                                          ║
+║  🧠 Specialization: Prompt Engineering                                                          ║
+║  🎂 Active Since: 没关系                                                                          ║
 ║  ⚡ Status: Always Learning & Building                                                           ║
 ║  🔥 Mission: Creating Digital Solutions That Matter                                               ║
 ╚══════════════════════════════════════════════════════════════════╝
 
 class MSRDeveloper {
     constructor() {
-        this.name = "MSR Cracker";
+        this.name = "5XCoder";
         this.role = "Shadow Developer";
         this.languages = ["Arabic", "English"];
         this.currentFocus = "Building the future, one line at a time";
@@ -135,7 +135,7 @@ console.log(msr.getCurrentStatus());
 
 ### 📱 Social Networks & Channels
 
-<a href="https://t.me/MSR_Cracker">
+<a href="https://t.me/KIMO_VIP">
   <img src="https://img.shields.io/badge/💬_Personal_Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Personal Telegram"/>
 </a>
 
@@ -153,7 +153,7 @@ console.log(msr.getCurrentStatus());
 
 ### 🌍 Professional Hub
 
-<a href="https://msr-academy.ct.ws/#home">
+<a href="https://5xcode.github.io/rdp-vnc/">
   <img src="https://img.shields.io/badge/🎓_MSR_ACADEMY-000000?style=for-the-badge&logo=google-chrome&logoColor=white" alt="MSR Academy"/>
 </a>
 
